@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "待办事项管理应用",
+  "navigationBarBackgroundColor": "#667eea",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#667eea",
+  "usingComponents": {}
+}

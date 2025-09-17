@@ -1,0 +1,194 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.tasks-container.data-v-027feebf {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20rpx 20rpx 160rpx 20rpx;
+  /* 底部留出导航栏空间 */
+}
+.stats-cards.data-v-027feebf {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+.stats-cards .stat-card.data-v-027feebf {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16rpx;
+  padding: 30rpx 20rpx;
+  text-align: center;
+  color: white;
+}
+.stats-cards .stat-card .stat-number.data-v-027feebf {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+.stats-cards .stat-card .stat-label.data-v-027feebf {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+.search-section.data-v-027feebf {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+  align-items: center;
+}
+.search-section .search-input.data-v-027feebf {
+  flex: 1;
+}
+.search-section .add-btn.data-v-027feebf {
+  white-space: nowrap;
+}
+.task-list .empty-state.data-v-027feebf {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+}
+.task-list .empty-state .empty-icon.data-v-027feebf {
+  font-size: 80rpx;
+  display: block;
+  margin-bottom: 20rpx;
+}
+.task-list .empty-state .empty-text.data-v-027feebf {
+  font-size: 32rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+.task-list .empty-state .empty-desc.data-v-027feebf {
+  font-size: 24rpx;
+  display: block;
+}
+.task-list .task-item.data-v-027feebf {
+  background: white;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.task-list .task-item.completed.data-v-027feebf {
+  opacity: 0.6;
+}
+.task-list .task-item.completed .task-title.data-v-027feebf {
+  text-decoration: line-through;
+}
+.task-list .task-item .task-content.data-v-027feebf {
+  flex: 1;
+  margin-right: 20rpx;
+}
+.task-list .task-item .task-content .task-header.data-v-027feebf {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+.task-list .task-item .task-content .task-header .task-title.data-v-027feebf {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+.task-list .task-item .task-content .task-header .task-priority.data-v-027feebf {
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+  color: white;
+}
+.task-list .task-item .task-content .task-header .task-priority.low.data-v-027feebf {
+  background-color: #52c41a;
+}
+.task-list .task-item .task-content .task-header .task-priority.medium.data-v-027feebf {
+  background-color: #faad14;
+}
+.task-list .task-item .task-content .task-header .task-priority.high.data-v-027feebf {
+  background-color: #ff4d4f;
+}
+.task-list .task-item .task-content .task-header .task-priority.urgent.data-v-027feebf {
+  background-color: #722ed1;
+}
+.task-list .task-item .task-content .task-desc.data-v-027feebf {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 15rpx;
+  display: block;
+}
+.task-list .task-item .task-content .task-meta.data-v-027feebf {
+  display: flex;
+  gap: 20rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+.task-list .task-item .task-content .task-meta .task-due.data-v-027feebf {
+  color: #ff4d4f;
+}
+.task-list .task-item .task-content .task-meta .task-category.data-v-027feebf {
+  background-color: #f0f0f0;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+.task-list .task-item .task-actions.data-v-027feebf {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+.add-task-popup.data-v-027feebf {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.add-task-popup .popup-header.data-v-027feebf {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+.add-task-popup .popup-header .popup-title.data-v-027feebf {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+.add-task-popup .popup-header .close-btn.data-v-027feebf {
+  font-size: 32rpx;
+}
+.add-task-popup .popup-content.data-v-027feebf {
+  flex: 1;
+  padding: 30rpx;
+  overflow-y: auto;
+}
+.add-task-popup .popup-actions.data-v-027feebf {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx;
+  border-top: 1rpx solid #eee;
+}
+.add-task-popup .popup-actions u-button.data-v-027feebf {
+  flex: 1;
+}

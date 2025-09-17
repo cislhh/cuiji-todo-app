@@ -1,0 +1,69 @@
+{
+  "name": "cuiji-todo-app",
+  "displayName": "待办事项管理应用",
+  "version": "1.0.0",
+  "description": "基于 uni-app + Vue3 + TypeScript 开发的跨平台待办事项管理应用",
+  "scripts": {
+    "dev:h5": "uni build --platform h5 --mode development",
+    "build:h5": "uni build --platform h5 --mode production",
+    "dev:mp-weixin": "uni build --platform mp-weixin --mode development",
+    "build:mp-weixin": "uni build --platform mp-weixin --mode production",
+    "dev:app": "uni build --platform app --mode development",
+    "build:app": "uni build --platform app --mode production"
+  },
+  "keywords": [
+    "todo",
+    "uniapp",
+    "vue3",
+    "typescript",
+    "跨平台"
+  ],
+  "author": "cuiji",
+  "license": "MIT",
+  "dependencies": {},
+  "uni_modules": {
+    "dependencies": [],
+    "encrypt": [],
+    "platforms": {
+      "cloud": {
+        "tcb": "√",
+        "aliyun": "√",
+        "alipay": "x"
+      },
+      "client": {
+        "uni-app": {
+          "vue": {
+            "vue2": "√",
+            "vue3": "√"
+          },
+          "web": {
+            "safari": "√",
+            "chrome": "√"
+          },
+          "app": {
+            "vue": "√",
+            "nvue": "√",
+            "android": "√",
+            "ios": "√",
+            "harmony": "√"
+          },
+          "mp": {
+            "weixin": "√",
+            "alipay": "√",
+            "toutiao": "√",
+            "baidu": "√",
+            "kuaishou": "√",
+            "jd": "√",
+            "harmony": "√",
+            "qq": "√",
+            "lark": "√"
+          }
+        }
+      }
+    }
+  },
+  "engines": {
+    "HBuilderX": "^3.1.0",
+    "uni-app": "^4.03"
+  }
+}
