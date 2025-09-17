@@ -10,11 +10,6 @@ import { createStore } from 'vuex'
 const store = createStore({
 // #endif
 	state: {
-		// 用户登录状态
-		hasLogin: false,
-		loginProvider: "",
-		openid: null,
-		
 		// 待办事项相关状态
 		todos: [],
 		filter: 'all', // all, active, completed
@@ -23,19 +18,6 @@ const store = createStore({
 		theme: 'light' // light, dark
 	},
 	mutations: {
-		// 用户登录相关
-		login(state, provider) {
-			state.hasLogin = true;
-			state.loginProvider = provider;
-		},
-		logout(state) {
-			state.hasLogin = false;
-			state.openid = null;
-		},
-		setOpenid(state, openid) {
-			state.openid = openid;
-		},
-		
 		// 待办事项相关
 		addTodo(state, todo) {
 			state.todos.push(todo);
@@ -82,28 +64,7 @@ const store = createStore({
 		}
 	},
 	actions: {
-		// 异步获取用户openid
-		getUserOpenId: async function({ commit, state }) {
-			return await new Promise((resolve, reject) => {
-				if (state.openid) {
-					resolve(state.openid);
-				} else {
-					uni.login({
-						success: (data) => {
-							commit('login');
-							// 这里应该调用真实的API获取openid
-							const openid = 'mock_openid_' + Date.now();
-							commit('setOpenid', openid);
-							resolve(openid);
-						},
-						fail: (err) => {
-							console.log('登录失败', err);
-							reject(err);
-						}
-					});
-				}
-			});
-		}
+		// 可以在这里添加其他异步操作
 	}
 })
 

@@ -10,15 +10,6 @@
       }
     },
     {
-      "path": "pages/login/login",
-      "style": {
-        "navigationBarTitleText": "登录",
-        "navigationBarBackgroundColor": "#667eea",
-        "navigationBarTextStyle": "white",
-        "backgroundColor": "#667eea"
-      }
-    },
-    {
       "path": "pages/tasks/tasks",
       "style": {
         "navigationBarTitleText": "任务管理",
