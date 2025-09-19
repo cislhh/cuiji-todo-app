@@ -88,6 +88,36 @@ const looseToNumber = (val) => {
   const n2 = parseFloat(val);
   return isNaN(n2) ? val : n2;
 };
+function normalizeStyle(value) {
+  if (isArray(value)) {
+    const res = {};
+    for (let i2 = 0; i2 < value.length; i2++) {
+      const item = value[i2];
+      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
+      if (normalized) {
+        for (const key in normalized) {
+          res[key] = normalized[key];
+        }
+      }
+    }
+    return res;
+  } else if (isString(value) || isObject$1(value)) {
+    return value;
+  }
+}
+const listDelimiterRE = /;(?![^(]*\))/g;
+const propertyDelimiterRE = /:([^]+)/;
+const styleCommentRE = /\/\*[^]*?\*\//g;
+function parseStringStyle(cssText) {
+  const ret = {};
+  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
+    if (item) {
+      const tmp = item.split(propertyDelimiterRE);
+      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+    }
+  });
+  return ret;
+}
 function normalizeClass(value) {
   let res = "";
   if (isString(value)) {
@@ -5118,6 +5148,22 @@ function getCreateApp() {
     return my[method];
   }
 }
+function stringifyStyle(value) {
+  if (isString(value)) {
+    return value;
+  }
+  return stringify(normalizeStyle(value));
+}
+function stringify(styles) {
+  let ret = "";
+  if (!styles || isString(styles)) {
+    return ret;
+  }
+  for (const key in styles) {
+    ret += `${key.startsWith(`--`) ? key : hyphenate(key)}:${styles[key]};`;
+  }
+  return ret;
+}
 function vOn(value, key) {
   const instance = getCurrentInstance();
   const ctx = instance.ctx;
@@ -5244,12 +5290,18 @@ function vFor(source, renderItem) {
   }
   return ret;
 }
+function setRef(ref2, id, opts = {}) {
+  const { $templateRefs } = getCurrentInstance();
+  $templateRefs.push({ i: id, r: ref2, k: opts.k, f: opts.f });
+}
 const o$1 = (value, key) => vOn(value, key);
 const f$1 = (source, renderItem) => vFor(source, renderItem);
+const s$1 = (value) => stringifyStyle(value);
 const e$1 = (target, ...sources) => extend(target, ...sources);
 const n$1 = (value) => normalizeClass(value);
 const t$1 = (val) => toDisplayString(val);
 const p$1 = (props) => renderProps(props);
+const sr = (ref2, id, opts) => setRef(ref2, id, opts);
 function createApp$1(rootComponent, rootProps = null) {
   rootComponent && (rootComponent.mpType = "app");
   return createVueApp(rootComponent, rootProps).use(plugin);
@@ -7071,7 +7123,7 @@ function isConsoleWritable() {
 function initRuntimeSocketService() {
   const hosts = "192.168.1.4,127.0.0.1,172.18.64.1";
   const port = "8090";
-  const id = "mp-weixin_T9KFHj";
+  const id = "mp-weixin_63x9yR";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -9801,32 +9853,27 @@ const tabBar = {
     {
       pagePath: "pages/index/index",
       text: "首页",
-      iconPath: "static/tab-home.png",
-      selectedIconPath: "static/tab-home-active.png"
+      iconPath: "static/tab-home.png"
     },
     {
       pagePath: "pages/tasks/tasks",
       text: "任务",
-      iconPath: "static/tab-task.png",
-      selectedIconPath: "static/tab-task-active.png"
+      iconPath: "static/tab-task.png"
     },
     {
       pagePath: "pages/add/add",
       text: "添加",
-      iconPath: "static/tab-add.png",
-      selectedIconPath: "static/tab-add-active.png"
+      iconPath: "static/tab-add.png"
     },
     {
       pagePath: "pages/statistics/statistics",
       text: "统计",
-      iconPath: "static/tab-stats.png",
-      selectedIconPath: "static/tab-stats-active.png"
+      iconPath: "static/tab-stats.png"
     },
     {
       pagePath: "pages/profile/profile",
       text: "我的",
-      iconPath: "static/tab-profile.png",
-      selectedIconPath: "static/tab-profile-active.png"
+      iconPath: "static/tab-profile.png"
     }
   ]
 };
@@ -12677,7 +12724,7 @@ let tr = new class {
 })();
 var nr = tr;
 var define_process_env_UNI_STATISTICS_CONFIG_default = { version: "2", enable: true };
-var define_process_env_UNI_STAT_TITLE_JSON_default = { "pages/index/index": "待办事项管理应用", "pages/tasks/tasks": "任务管理", "pages/statistics/statistics": "进度统计" };
+var define_process_env_UNI_STAT_TITLE_JSON_default = { "pages/index/index": "待办事项管理应用", "pages/tasks/tasks": "任务管理", "pages/add/add": "添加任务", "pages/statistics/statistics": "进度统计", "pages/profile/profile": "我的" };
 var define_process_env_UNI_STAT_UNI_CLOUD_default = {};
 const sys = index$1.getSystemInfoSync();
 const STAT_VERSION = "4.66";
@@ -13847,5 +13894,7 @@ exports.p = p$1;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
+exports.s = s$1;
+exports.sr = sr;
 exports.t = t$1;
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map

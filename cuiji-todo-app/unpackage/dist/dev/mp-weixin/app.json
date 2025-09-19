@@ -21,32 +21,27 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "static/tab-home.png",
-        "selectedIconPath": "static/tab-home-active.png"
+        "iconPath": "static/tab-home.png"
       },
       {
         "pagePath": "pages/tasks/tasks",
         "text": "任务",
-        "iconPath": "static/tab-task.png",
-        "selectedIconPath": "static/tab-task-active.png"
+        "iconPath": "static/tab-task.png"
       },
       {
         "pagePath": "pages/add/add",
         "text": "添加",
-        "iconPath": "static/tab-add.png",
-        "selectedIconPath": "static/tab-add-active.png"
+        "iconPath": "static/tab-add.png"
       },
       {
         "pagePath": "pages/statistics/statistics",
         "text": "统计",
-        "iconPath": "static/tab-stats.png",
-        "selectedIconPath": "static/tab-stats-active.png"
+        "iconPath": "static/tab-stats.png"
       },
       {
         "pagePath": "pages/profile/profile",
         "text": "我的",
-        "iconPath": "static/tab-profile.png",
-        "selectedIconPath": "static/tab-profile-active.png"
+        "iconPath": "static/tab-profile.png"
       }
     ]
   },
