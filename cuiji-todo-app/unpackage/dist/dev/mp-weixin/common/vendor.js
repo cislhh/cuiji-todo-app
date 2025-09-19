@@ -5244,17 +5244,12 @@ function vFor(source, renderItem) {
   }
   return ret;
 }
-function setRef(ref2, id, opts = {}) {
-  const { $templateRefs } = getCurrentInstance();
-  $templateRefs.push({ i: id, r: ref2, k: opts.k, f: opts.f });
-}
 const o$1 = (value, key) => vOn(value, key);
 const f$1 = (source, renderItem) => vFor(source, renderItem);
 const e$1 = (target, ...sources) => extend(target, ...sources);
 const n$1 = (value) => normalizeClass(value);
 const t$1 = (val) => toDisplayString(val);
 const p$1 = (props) => renderProps(props);
-const sr = (ref2, id, opts) => setRef(ref2, id, opts);
 function createApp$1(rootComponent, rootProps = null) {
   rootComponent && (rootComponent.mpType = "app");
   return createVueApp(rootComponent, rootProps).use(plugin);
@@ -7076,7 +7071,7 @@ function isConsoleWritable() {
 function initRuntimeSocketService() {
   const hosts = "192.168.1.4,127.0.0.1,172.18.64.1";
   const port = "8090";
-  const id = "mp-weixin_LOIj8C";
+  const id = "mp-weixin_T9KFHj";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -9753,15 +9748,6 @@ const pages = [
     }
   },
   {
-    path: "pages/login/login",
-    style: {
-      navigationBarTitleText: "登录",
-      navigationBarBackgroundColor: "#667eea",
-      navigationBarTextStyle: "white",
-      backgroundColor: "#667eea"
-    }
-  },
-  {
     path: "pages/tasks/tasks",
     style: {
       navigationBarTitleText: "任务管理",
@@ -9772,9 +9758,27 @@ const pages = [
     }
   },
   {
+    path: "pages/add/add",
+    style: {
+      navigationBarTitleText: "添加任务",
+      navigationBarBackgroundColor: "#667eea",
+      navigationBarTextStyle: "white",
+      backgroundColor: "#f5f5f5"
+    }
+  },
+  {
     path: "pages/statistics/statistics",
     style: {
       navigationBarTitleText: "进度统计",
+      navigationBarBackgroundColor: "#667eea",
+      navigationBarTextStyle: "white",
+      backgroundColor: "#f5f5f5"
+    }
+  },
+  {
+    path: "pages/profile/profile",
+    style: {
+      navigationBarTitleText: "我的",
       navigationBarBackgroundColor: "#667eea",
       navigationBarTextStyle: "white",
       backgroundColor: "#f5f5f5"
@@ -9807,10 +9811,22 @@ const tabBar = {
       selectedIconPath: "static/tab-task-active.png"
     },
     {
+      pagePath: "pages/add/add",
+      text: "添加",
+      iconPath: "static/tab-add.png",
+      selectedIconPath: "static/tab-add-active.png"
+    },
+    {
       pagePath: "pages/statistics/statistics",
       text: "统计",
       iconPath: "static/tab-stats.png",
       selectedIconPath: "static/tab-stats-active.png"
+    },
+    {
+      pagePath: "pages/profile/profile",
+      text: "我的",
+      iconPath: "static/tab-profile.png",
+      selectedIconPath: "static/tab-profile-active.png"
     }
   ]
 };
@@ -12661,7 +12677,7 @@ let tr = new class {
 })();
 var nr = tr;
 var define_process_env_UNI_STATISTICS_CONFIG_default = { version: "2", enable: true };
-var define_process_env_UNI_STAT_TITLE_JSON_default = { "pages/index/index": "待办事项管理应用" };
+var define_process_env_UNI_STAT_TITLE_JSON_default = { "pages/index/index": "待办事项管理应用", "pages/tasks/tasks": "任务管理", "pages/statistics/statistics": "进度统计" };
 var define_process_env_UNI_STAT_UNI_CLOUD_default = {};
 const sys = index$1.getSystemInfoSync();
 const STAT_VERSION = "4.66";
@@ -13831,6 +13847,5 @@ exports.p = p$1;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
-exports.sr = sr;
 exports.t = t$1;
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map

@@ -1,9 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/login/login",
     "pages/tasks/tasks",
-    "pages/statistics/statistics"
+    "pages/add/add",
+    "pages/statistics/statistics",
+    "pages/profile/profile"
   ],
   "window": {
     "navigationBarTextStyle": "white",
@@ -30,10 +31,22 @@
         "selectedIconPath": "static/tab-task-active.png"
       },
       {
+        "pagePath": "pages/add/add",
+        "text": "添加",
+        "iconPath": "static/tab-add.png",
+        "selectedIconPath": "static/tab-add-active.png"
+      },
+      {
         "pagePath": "pages/statistics/statistics",
         "text": "统计",
         "iconPath": "static/tab-stats.png",
         "selectedIconPath": "static/tab-stats-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "static/tab-profile.png",
+        "selectedIconPath": "static/tab-profile-active.png"
       }
     ]
   },

@@ -5,9 +5,10 @@ const common_assets = require("./common/assets.js");
 const store_index = require("./store/index.js");
 if (!Math) {
   "./pages/index/index.js";
-  "./pages/login/login.js";
   "./pages/tasks/tasks.js";
+  "./pages/add/add.js";
   "./pages/statistics/statistics.js";
+  "./pages/profile/profile.js";
 }
 const version = "1.0.0";
 const _sfc_main$1 = /* @__PURE__ */ common_vendor.defineComponent({
