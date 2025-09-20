@@ -7123,7 +7123,7 @@ function isConsoleWritable() {
 function initRuntimeSocketService() {
   const hosts = "192.168.1.4,127.0.0.1,172.18.64.1";
   const port = "8090";
-  const id = "mp-weixin_63x9yR";
+  const id = "mp-weixin_Yd5Wam";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -9844,36 +9844,42 @@ const globalStyle = {
   backgroundColor: "#667eea"
 };
 const tabBar = {
+  iconfontSrc: "/static/iconfont.ttf",
   color: "#8a8a8a",
   selectedColor: "#667eea",
-  borderStyle: "white",
-  backgroundColor: "#ffffff",
-  height: "120rpx",
+  borderStyle: "black",
+  backgroundColor: "#F8F8F8",
+  fontSize: "28rpx",
   list: [
     {
       pagePath: "pages/index/index",
       text: "首页",
-      iconPath: "static/tab-home.png"
+      iconPath: "./static/tab-home.png",
+      selectedIconPath: "./static/tab-home-selected.png"
     },
     {
       pagePath: "pages/tasks/tasks",
       text: "任务",
-      iconPath: "static/tab-task.png"
+      iconPath: "./static/tab-tasks.png",
+      selectedIconPath: "./static/tab-tasks-selected.png"
     },
     {
       pagePath: "pages/add/add",
       text: "添加",
-      iconPath: "static/tab-add.png"
+      iconPath: "./static/tab-add.png",
+      selectedIconPath: "./static/tab-add-selected.png"
     },
     {
       pagePath: "pages/statistics/statistics",
       text: "统计",
-      iconPath: "static/tab-stats.png"
+      iconPath: "./static/tab-stats.png",
+      selectedIconPath: "./static/tab-stats-selected.png"
     },
     {
       pagePath: "pages/profile/profile",
       text: "我的",
-      iconPath: "static/tab-profile.png"
+      iconPath: "/static/tab-profile.png",
+      selectedIconPath: "/static/tab-profile-selected.png"
     }
   ]
 };

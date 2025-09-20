@@ -2,18 +2,12 @@
   <view id="app">
     <!-- 应用内容 -->
   </view>
-  <!-- 自定义底部导航栏 -->
-  <CustomTabBar />
 </template>
 
 <script>
 import { version } from "./package.json";
-import CustomTabBar from "@/components/CustomTabBar/CustomTabBar.vue";
 
 export default {
-  components: {
-    CustomTabBar,
-  },
   onLaunch: function () {
     console.log("待办事项管理应用启动", `v${version}`);
   },

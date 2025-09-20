@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const common_assets = require("../../common/assets.js");
 if (!Array) {
   const _easycom_uni_popup2 = common_vendor.resolveComponent("uni-popup");
   _easycom_uni_popup2();
@@ -226,12 +225,11 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     });
     return (_ctx, _cache) => {
       return {
-        a: common_assets._imports_0$1,
-        b: common_vendor.t(todayDate.value),
-        c: common_vendor.t(todayStats.totalTasks),
-        d: common_vendor.t(todayStats.completedTasks),
-        e: common_vendor.t(todayStats.completionRate),
-        f: common_vendor.f(shareCards.value, (share, index, i0) => {
+        a: common_vendor.t(todayDate.value),
+        b: common_vendor.t(todayStats.totalTasks),
+        c: common_vendor.t(todayStats.completedTasks),
+        d: common_vendor.t(todayStats.completionRate),
+        e: common_vendor.f(shareCards.value, (share, index, i0) => {
           return {
             a: share.user.avatar,
             b: common_vendor.t(share.user.name),
@@ -258,12 +256,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
             q: common_vendor.o(($event) => viewShareDetail(share), index)
           };
         }),
-        g: common_vendor.o(($event) => showCreateShare.value = true),
-        h: common_vendor.o(closeCreateShare),
-        i: newShare.content,
-        j: common_vendor.o(($event) => newShare.content = $event.detail.value),
-        k: common_vendor.t(newShare.content.length),
-        l: common_vendor.f(achievementTags, (tag, k0, i0) => {
+        f: common_vendor.o(($event) => showCreateShare.value = true),
+        g: common_vendor.o(closeCreateShare),
+        h: newShare.content,
+        i: common_vendor.o(($event) => newShare.content = $event.detail.value),
+        j: common_vendor.t(newShare.content.length),
+        k: common_vendor.f(achievementTags, (tag, k0, i0) => {
           return {
             a: common_vendor.t(tag.text),
             b: tag.id,
@@ -271,12 +269,12 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
             d: common_vendor.o(($event) => toggleTag(tag.id), tag.id)
           };
         }),
-        m: common_vendor.o(closeCreateShare),
-        n: common_vendor.o(createShare),
-        o: common_vendor.sr(createSharePopup, "1cf27b2a-0", {
+        l: common_vendor.o(closeCreateShare),
+        m: common_vendor.o(createShare),
+        n: common_vendor.sr(createSharePopup, "1cf27b2a-0", {
           "k": "createSharePopup"
         }),
-        p: common_vendor.p({
+        o: common_vendor.p({
           type: "bottom"
         })
       };

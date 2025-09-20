@@ -71,7 +71,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     loadStats();
     return (_ctx, _cache) => {
       return {
-        a: common_assets._imports_0$2,
+        a: common_assets._imports_0,
         b: common_vendor.t(userInfo.username || "用户"),
         c: common_vendor.t(userInfo.email || "user@example.com"),
         d: common_vendor.o(($event) => onMenuClick("settings")),

@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="header">
-      <image class="logo" src="/static/uni.png" mode="aspectFit"></image>
+      <!-- <image class="logo" src="/static/uni.png" mode="aspectFit"></image> -->
       <text class="title">待办事项管理应用</text>
       <text class="subtitle">基于 uni-app + Vue3 + TypeScript</text>
     </view>
