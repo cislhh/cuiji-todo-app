@@ -25,14 +25,6 @@
         @clear="handleClearSearch"
         class="search-input"
       ></u-search>
-      <u-button
-        type="primary"
-        size="mini"
-        @click="showAddTask = true"
-        class="add-btn"
-      >
-        添加任务
-      </u-button>
     </view>
 
     <!-- 任务列表 -->
@@ -40,7 +32,7 @@
       <view v-if="tasks.length === 0" class="empty-state">
         <text class="empty-icon">📝</text>
         <text class="empty-text">暂无任务</text>
-        <text class="empty-desc">点击上方按钮添加您的第一个任务</text>
+        <text class="empty-desc">您还没有任何任务</text>
       </view>
 
       <view v-else>
@@ -85,77 +77,14 @@
         </view>
       </view>
     </view>
-
-    <!-- 添加任务弹窗 -->
-    <u-popup v-model="showAddTask" mode="bottom" height="80%">
-      <view class="add-task-popup">
-        <view class="popup-header">
-          <text class="popup-title">添加任务</text>
-          <u-button type="text" @click="showAddTask = false" class="close-btn">
-            ✕
-          </u-button>
-        </view>
-
-        <view class="popup-content">
-          <u-form :model="newTask" label-position="top">
-            <u-form-item label="任务标题">
-              <u-input
-                v-model="newTask.title"
-                placeholder="请输入任务标题"
-                maxlength="50"
-              ></u-input>
-            </u-form-item>
-
-            <u-form-item label="任务描述">
-              <u-textarea
-                v-model="newTask.description"
-                placeholder="请输入任务描述（可选）"
-                maxlength="200"
-                :auto-height="true"
-              ></u-textarea>
-            </u-form-item>
-
-            <u-form-item label="优先级">
-              <u-select
-                v-model="newTask.priority"
-                :options="priorityOptions"
-                placeholder="选择优先级"
-              ></u-select>
-            </u-form-item>
-
-            <u-form-item label="截止日期">
-              <u-datetime-picker
-                v-model="newTask.dueDate"
-                mode="datetime"
-                placeholder="选择截止日期（可选）"
-              ></u-datetime-picker>
-            </u-form-item>
-
-            <u-form-item label="分类">
-              <u-input
-                v-model="newTask.category"
-                placeholder="输入分类（可选）"
-                maxlength="20"
-              ></u-input>
-            </u-form-item>
-          </u-form>
-        </view>
-
-        <view class="popup-actions">
-          <u-button @click="showAddTask = false">取消</u-button>
-          <u-button type="primary" @click="addTask">保存</u-button>
-        </view>
-      </view>
-    </u-popup>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 // 响应式数据
 const searchKeyword = ref("");
-const showAddTask = ref(false);
 const tasks = ref([
   {
     id: 1,
@@ -178,23 +107,6 @@ const tasks = ref([
     createTime: new Date(),
   },
 ]);
-
-// 新任务表单
-const newTask = reactive({
-  title: "",
-  description: "",
-  priority: "medium",
-  dueDate: "",
-  category: "",
-});
-
-// 优先级选项
-const priorityOptions = [
-  { label: "低", value: "low" },
-  { label: "中", value: "medium" },
-  { label: "高", value: "high" },
-  { label: "紧急", value: "urgent" },
-];
 
 // 计算属性
 const taskStats = computed(() => {
@@ -245,44 +157,6 @@ const deleteTask = (taskId: number) => {
   });
 };
 
-const addTask = () => {
-  if (!newTask.title.trim()) {
-    uni.showToast({
-      title: "请输入任务标题",
-      icon: "none",
-    });
-    return;
-  }
-
-  const task = {
-    id: Date.now(),
-    title: newTask.title.trim(),
-    description: newTask.description.trim(),
-    completed: false,
-    priority: newTask.priority,
-    dueDate: newTask.dueDate,
-    category: newTask.category.trim() || "未分类",
-    createTime: new Date(),
-  };
-
-  tasks.value.unshift(task);
-
-  // 重置表单
-  Object.assign(newTask, {
-    title: "",
-    description: "",
-    priority: "medium",
-    dueDate: "",
-    category: "",
-  });
-
-  showAddTask.value = false;
-  uni.showToast({
-    title: "添加成功",
-    icon: "success",
-  });
-};
-
 const getPriorityText = (priority: string) => {
   const map: Record<string, string> = {
     low: "低",
@@ -300,18 +174,6 @@ const formatDate = (dateStr: string) => {
 
 onMounted(() => {
   console.log("任务页面加载完成");
-
-  // 检查是否从导航栏创建任务按钮进入
-  const pages = getCurrentPages();
-  const currentPage = pages[pages.length - 1];
-  const options = currentPage.options;
-
-  if (options.action === "create") {
-    // 延迟显示创建任务弹窗，确保页面完全加载
-    setTimeout(() => {
-      showAddTask.value = true;
-    }, 300);
-  }
 });
 </script>
 
@@ -350,17 +212,10 @@ onMounted(() => {
 }
 
 .search-section {
-  display: flex;
-  gap: 20rpx;
   margin-bottom: 30rpx;
-  align-items: center;
 
   .search-input {
-    flex: 1;
-  }
-
-  .add-btn {
-    white-space: nowrap;
+    width: 100%;
   }
 }
 
@@ -477,46 +332,6 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       gap: 10rpx;
-    }
-  }
-}
-
-.add-task-popup {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 30rpx;
-    border-bottom: 1rpx solid #eee;
-
-    .popup-title {
-      font-size: 36rpx;
-      font-weight: bold;
-    }
-
-    .close-btn {
-      font-size: 32rpx;
-    }
-  }
-
-  .popup-content {
-    flex: 1;
-    padding: 30rpx;
-    overflow-y: auto;
-  }
-
-  .popup-actions {
-    display: flex;
-    gap: 20rpx;
-    padding: 30rpx;
-    border-top: 1rpx solid #eee;
-
-    u-button {
-      flex: 1;
     }
   }
 }

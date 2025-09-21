@@ -53,16 +53,10 @@
   opacity: 0.9;
 }
 .search-section.data-v-027feebf {
-  display: flex;
-  gap: 20rpx;
   margin-bottom: 30rpx;
-  align-items: center;
 }
 .search-section .search-input.data-v-027feebf {
-  flex: 1;
-}
-.search-section .add-btn.data-v-027feebf {
-  white-space: nowrap;
+  width: 100%;
 }
 .task-list .empty-state.data-v-027feebf {
   text-align: center;
@@ -158,37 +152,4 @@
   display: flex;
   flex-direction: column;
   gap: 10rpx;
-}
-.add-task-popup.data-v-027feebf {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.add-task-popup .popup-header.data-v-027feebf {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30rpx;
-  border-bottom: 1rpx solid #eee;
-}
-.add-task-popup .popup-header .popup-title.data-v-027feebf {
-  font-size: 36rpx;
-  font-weight: bold;
-}
-.add-task-popup .popup-header .close-btn.data-v-027feebf {
-  font-size: 32rpx;
-}
-.add-task-popup .popup-content.data-v-027feebf {
-  flex: 1;
-  padding: 30rpx;
-  overflow-y: auto;
-}
-.add-task-popup .popup-actions.data-v-027feebf {
-  display: flex;
-  gap: 20rpx;
-  padding: 30rpx;
-  border-top: 1rpx solid #eee;
-}
-.add-task-popup .popup-actions u-button.data-v-027feebf {
-  flex: 1;
 }
