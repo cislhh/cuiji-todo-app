@@ -1,6 +1,10 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const common_assets = require("../../common/assets.js");
+if (!Math) {
+  Modal();
+}
+const Modal = () => "../../components/Common/Modal.js";
 const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
   __name: "profile",
   setup(__props) {
@@ -14,6 +18,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       todayTasks: 0,
       overdueTasks: 0
     });
+    const aboutModalVisible = common_vendor.ref(false);
     const onMenuClick = (type) => {
       switch (type) {
         case "settings":
@@ -41,10 +46,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
           });
           break;
         case "about":
-          common_vendor.index.showToast({
-            title: "关于我们功能开发中",
-            icon: "none"
-          });
+          aboutModalVisible.value = true;
           break;
       }
     };
@@ -83,7 +85,14 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         j: common_vendor.t(stats.completedTasks),
         k: common_vendor.t(stats.todayTasks),
         l: common_vendor.t(stats.overdueTasks),
-        m: common_vendor.o(onLogout)
+        m: common_vendor.o(onLogout),
+        n: common_assets._imports_1,
+        o: common_vendor.o(($event) => aboutModalVisible.value = $event),
+        p: common_vendor.p({
+          ["show-footer"]: false,
+          width: "700rpx",
+          visible: aboutModalVisible.value
+        })
       };
     };
   }

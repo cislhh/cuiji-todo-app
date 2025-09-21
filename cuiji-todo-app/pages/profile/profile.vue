@@ -79,11 +79,80 @@
     <view class="logout-section">
       <button class="logout-btn" @click="onLogout">退出登录</button>
     </view>
+
+    <!-- 关于我们弹窗 -->
+    <Modal
+      v-model:visible="aboutModalVisible"
+      :show-footer="false"
+      width="700rpx"
+    >
+      <view class="about-content">
+        <view class="modal-title">关于我们</view>
+
+        <view class="app-info">
+          <image class="app-logo" src="/static/logo.png" mode="aspectFit" />
+          <text class="app-name">待办事项管理应用</text>
+          <text class="app-version">版本 1.0.0</text>
+        </view>
+
+        <view class="app-description">
+          <text class="description-title">应用简介</text>
+          <text class="description-text">
+            这是一款基于 uni-app + Vue3 + TypeScript
+            开发的跨平台待办事项管理应用。
+            帮助您高效管理日常任务，提升工作效率。
+          </text>
+        </view>
+
+        <view class="app-features">
+          <text class="features-title">主要功能</text>
+          <view class="features-list">
+            <view class="feature-item">
+              <text class="feature-icon">📝</text>
+              <text class="feature-text">任务创建与管理</text>
+            </view>
+            <view class="feature-item">
+              <text class="feature-icon">📅</text>
+              <text class="feature-text">日期提醒与分类</text>
+            </view>
+            <view class="feature-item">
+              <text class="feature-icon">📊</text>
+              <text class="feature-text">数据统计与分析</text>
+            </view>
+            <view class="feature-item">
+              <text class="feature-icon">☁️</text>
+              <text class="feature-text">云端同步备份</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="contact-info">
+          <text class="contact-title">联系我们</text>
+          <view class="contact-item">
+            <text class="contact-label">开发者：</text>
+            <text class="contact-value">cuiji</text>
+          </view>
+          <view class="contact-item">
+            <text class="contact-label">邮箱：</text>
+            <text class="contact-value">cuiji@example.com</text>
+          </view>
+          <view class="contact-item">
+            <text class="contact-label">GitHub：</text>
+            <text class="contact-value">github.com/cuiji</text>
+          </view>
+        </view>
+
+        <view class="copyright">
+          <text class="copyright-text">© 2024 cuiji. All rights reserved.</text>
+        </view>
+      </view>
+    </Modal>
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import Modal from "@/components/Common/Modal.vue";
 
 interface UserInfo {
   username: string;
@@ -109,6 +178,9 @@ const stats = reactive<Stats>({
   todayTasks: 0,
   overdueTasks: 0,
 });
+
+// 弹窗状态
+const aboutModalVisible = ref(false);
 
 const onMenuClick = (type: string) => {
   switch (type) {
@@ -137,10 +209,8 @@ const onMenuClick = (type: string) => {
       });
       break;
     case "about":
-      uni.showToast({
-        title: "关于我们功能开发中",
-        icon: "none",
-      });
+      // 打开关于我们弹窗
+      aboutModalVisible.value = true;
       break;
   }
 };
@@ -312,6 +382,145 @@ loadStats();
 
     &:active {
       background: #ff3742;
+    }
+  }
+}
+
+// 关于我们弹窗样式
+.about-content {
+  .modal-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30rpx;
+    padding-bottom: 20rpx;
+    border-bottom: 2rpx solid #f0f0f0;
+  }
+
+  .app-info {
+    text-align: center;
+    padding: 20rpx 0 40rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    margin-bottom: 30rpx;
+
+    .app-logo {
+      width: 120rpx;
+      height: 120rpx;
+      border-radius: 20rpx;
+      margin-bottom: 20rpx;
+      background: #f5f5f5;
+    }
+
+    .app-name {
+      display: block;
+      font-size: 32rpx;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10rpx;
+    }
+
+    .app-version {
+      display: block;
+      font-size: 24rpx;
+      color: #666;
+    }
+  }
+
+  .app-description {
+    margin-bottom: 30rpx;
+
+    .description-title {
+      display: block;
+      font-size: 28rpx;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15rpx;
+    }
+
+    .description-text {
+      display: block;
+      font-size: 26rpx;
+      color: #666;
+      line-height: 1.6;
+    }
+  }
+
+  .app-features {
+    margin-bottom: 30rpx;
+
+    .features-title {
+      display: block;
+      font-size: 28rpx;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20rpx;
+    }
+
+    .features-list {
+      .feature-item {
+        display: flex;
+        align-items: center;
+        padding: 15rpx 0;
+        border-bottom: 1rpx solid #f8f8f8;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .feature-icon {
+          font-size: 28rpx;
+          margin-right: 20rpx;
+          width: 40rpx;
+          text-align: center;
+        }
+
+        .feature-text {
+          font-size: 26rpx;
+          color: #666;
+        }
+      }
+    }
+  }
+
+  .contact-info {
+    margin-bottom: 30rpx;
+
+    .contact-title {
+      display: block;
+      font-size: 28rpx;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20rpx;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      padding: 10rpx 0;
+
+      .contact-label {
+        font-size: 26rpx;
+        color: #666;
+        width: 140rpx;
+      }
+
+      .contact-value {
+        font-size: 26rpx;
+        color: #333;
+        flex: 1;
+      }
+    }
+  }
+
+  .copyright {
+    text-align: center;
+    padding-top: 20rpx;
+    border-top: 1rpx solid #f0f0f0;
+
+    .copyright-text {
+      font-size: 22rpx;
+      color: #999;
     }
   }
 }

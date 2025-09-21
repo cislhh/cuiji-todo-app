@@ -137,3 +137,116 @@
 .logout-section .logout-btn.data-v-dd383ca2:active {
   background: #ff3742;
 }
+.about-content .modal-title.data-v-dd383ca2 {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+.about-content .app-info.data-v-dd383ca2 {
+  text-align: center;
+  padding: 20rpx 0 40rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  margin-bottom: 30rpx;
+}
+.about-content .app-info .app-logo.data-v-dd383ca2 {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  background: #f5f5f5;
+}
+.about-content .app-info .app-name.data-v-dd383ca2 {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+.about-content .app-info .app-version.data-v-dd383ca2 {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+}
+.about-content .app-description.data-v-dd383ca2 {
+  margin-bottom: 30rpx;
+}
+.about-content .app-description .description-title.data-v-dd383ca2 {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+.about-content .app-description .description-text.data-v-dd383ca2 {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+.about-content .app-features.data-v-dd383ca2 {
+  margin-bottom: 30rpx;
+}
+.about-content .app-features .features-title.data-v-dd383ca2 {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+.about-content .app-features .features-list .feature-item.data-v-dd383ca2 {
+  display: flex;
+  align-items: center;
+  padding: 15rpx 0;
+  border-bottom: 1rpx solid #f8f8f8;
+}
+.about-content .app-features .features-list .feature-item.data-v-dd383ca2:last-child {
+  border-bottom: none;
+}
+.about-content .app-features .features-list .feature-item .feature-icon.data-v-dd383ca2 {
+  font-size: 28rpx;
+  margin-right: 20rpx;
+  width: 40rpx;
+  text-align: center;
+}
+.about-content .app-features .features-list .feature-item .feature-text.data-v-dd383ca2 {
+  font-size: 26rpx;
+  color: #666;
+}
+.about-content .contact-info.data-v-dd383ca2 {
+  margin-bottom: 30rpx;
+}
+.about-content .contact-info .contact-title.data-v-dd383ca2 {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+.about-content .contact-info .contact-item.data-v-dd383ca2 {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 0;
+}
+.about-content .contact-info .contact-item .contact-label.data-v-dd383ca2 {
+  font-size: 26rpx;
+  color: #666;
+  width: 140rpx;
+}
+.about-content .contact-info .contact-item .contact-value.data-v-dd383ca2 {
+  font-size: 26rpx;
+  color: #333;
+  flex: 1;
+}
+.about-content .copyright.data-v-dd383ca2 {
+  text-align: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+.about-content .copyright .copyright-text.data-v-dd383ca2 {
+  font-size: 22rpx;
+  color: #999;
+}
