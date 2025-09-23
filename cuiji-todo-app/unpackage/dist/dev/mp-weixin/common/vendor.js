@@ -9882,12 +9882,6 @@ const tabBar = {
       selectedIconPath: "./static/tab-tasks-selected.png"
     },
     {
-      pagePath: "pages/add/add",
-      text: "添加",
-      iconPath: "./static/tab-add.png",
-      selectedIconPath: "./static/tab-add-selected.png"
-    },
-    {
       pagePath: "pages/statistics/statistics",
       text: "统计",
       iconPath: "./static/tab-stats.png",

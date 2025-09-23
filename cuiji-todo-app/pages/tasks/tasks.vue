@@ -3,7 +3,7 @@
     <!-- 页面标题 -->
     <view class="header">
       <text class="title">任务管理</text>
-      <view class="add-btn" @click="goToAddPage">
+      <view class="add-btn" @click="opD">
         <text class="add-icon">+</text>
       </view>
     </view>
@@ -79,17 +79,108 @@
         </view>
       </view>
     </view>
+
+    <!-- 添加任务弹窗 -->
+    <Modal
+      :visible="showAddModal"
+      :mask-closable="false"
+      :show-footer="true"
+      :show-cancel="true"
+      :show-confirm="true"
+      cancel-text="取消"
+      confirm-text="确定"
+      @close="closeAddModal"
+      @cancel="closeAddModal"
+      @confirm="addTask"
+    >
+      <view class="modal-content">
+        <view class="modal-header">
+          <text class="modal-title">添加任务</text>
+        </view>
+
+        <view class="modal-body">
+          <view class="form-item">
+            <text class="form-label">任务标题 *</text>
+            <input
+              v-model="newTask.title"
+              class="form-input"
+              placeholder="请输入任务标题"
+              maxlength="100"
+            />
+          </view>
+
+          <view class="form-item">
+            <text class="form-label">任务描述</text>
+            <textarea
+              v-model="newTask.description"
+              class="form-textarea"
+              placeholder="请输入任务描述"
+              maxlength="500"
+            />
+          </view>
+
+          <view class="form-item">
+            <text class="form-label">优先级</text>
+            <picker
+              :value="priorityIndex"
+              :range="priorityOptions"
+              @change="onPriorityChange"
+            >
+              <view class="picker-view">
+                <text>{{ priorityOptions[priorityIndex] }}</text>
+                <text class="picker-arrow">▼</text>
+              </view>
+            </picker>
+          </view>
+
+          <view class="form-item">
+            <text class="form-label">分类</text>
+            <input
+              v-model="newTask.category"
+              class="form-input"
+              placeholder="请输入分类"
+              maxlength="50"
+            />
+          </view>
+
+          <view class="form-item">
+            <text class="form-label">截止日期</text>
+            <picker mode="date" :value="newTask.dueDate" @change="onDateChange">
+              <view class="picker-view">
+                <text>{{ newTask.dueDate || "选择截止日期" }}</text>
+                <text class="picker-arrow">▼</text>
+              </view>
+            </picker>
+          </view>
+        </view>
+      </view>
+    </Modal>
   </view>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { onShow } from "@dcloudio/uni-app";
+import Modal from "@/components/Common/Modal.vue";
 
 // 响应式数据
 const loading = ref(false);
+const showAddModal = ref(false);
 const currentFilter = ref("all");
 const tasks = ref([]);
+
+// 新任务数据
+const newTask = reactive({
+  title: "",
+  description: "",
+  priority: 2,
+  category: "默认分类",
+  dueDate: "",
+});
+
+// 优先级选项
+const priorityOptions = ["低优先级", "中优先级", "高优先级"];
+const priorityIndex = ref(1); // 默认中优先级
 
 // 计算属性
 const filteredTasks = computed(() => {
@@ -200,11 +291,75 @@ const deleteTask = async (taskId) => {
   });
 };
 
-// 跳转到添加页面
-const goToAddPage = () => {
-  uni.navigateTo({
-    url: "/pages/add/add",
-  });
+// 优先级选择
+const onPriorityChange = (e) => {
+  priorityIndex.value = e.detail.value;
+  newTask.priority = parseInt(e.detail.value) + 1;
+};
+
+// 日期选择
+const onDateChange = (e) => {
+  newTask.dueDate = e.detail.value;
+};
+
+// 添加任务
+const addTask = async () => {
+  if (!newTask.title.trim()) {
+    uni.showToast({
+      title: "请输入任务标题",
+      icon: "none",
+    });
+    return;
+  }
+
+  try {
+    const result = await uniCloud.callFunction({
+      name: "task-create",
+      data: {
+        title: newTask.title,
+        description: newTask.description,
+        priority: newTask.priority,
+        category: newTask.category,
+        dueDate: newTask.dueDate,
+      },
+    });
+
+    if (result.result.code === 0) {
+      uni.showToast({
+        title: "任务添加成功",
+        icon: "success",
+      });
+      closeAddModal();
+      getTaskList(); // 重新获取任务列表
+    } else {
+      uni.showToast({
+        title: result.result.message || "添加任务失败",
+        icon: "none",
+      });
+    }
+  } catch (error) {
+    console.error("添加任务失败:", error);
+    uni.showToast({
+      title: "网络错误",
+      icon: "none",
+    });
+  }
+};
+
+const opD = () => {
+  showAddModal.value = true;
+  console.log("opD", showAddModal.value);
+};
+// 关闭添加弹窗
+const closeAddModal = () => {
+  showAddModal.value = false;
+  // 重置表单
+  newTask.title = "";
+  newTask.description = "";
+  newTask.priority = 2;
+  newTask.category = "默认分类";
+  newTask.dueDate = "";
+  priorityIndex.value = 1;
 };
 
 // 生命周期
@@ -383,6 +538,110 @@ onShow(() => {
         &.priority-3 {
           background: #fff1f0;
           color: #ff4d4f;
+        }
+      }
+    }
+  }
+}
+
+.modal-content {
+  width: 100%;
+  min-width: 600rpx;
+  max-width: 700rpx;
+  background: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+
+  .modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40rpx 30rpx;
+    border-bottom: 1rpx solid #eee;
+
+    .modal-title {
+      font-size: 36rpx;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+
+  .modal-body {
+    padding: 40rpx 30rpx;
+
+    .form-item {
+      margin-bottom: 40rpx;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .form-label {
+        font-size: 30rpx;
+        color: #333;
+        display: block;
+        margin-bottom: 20rpx;
+        font-weight: 500;
+      }
+
+      .form-input {
+        width: 100%;
+        height: 80rpx;
+        padding: 0 24rpx;
+        border: 2rpx solid #e0e0e0;
+        border-radius: 12rpx;
+        font-size: 30rpx;
+        box-sizing: border-box;
+        line-height: 80rpx;
+        transition: border-color 0.3s;
+
+        &:focus {
+          border-color: #667eea;
+          outline: none;
+        }
+      }
+
+      .form-textarea {
+        width: 100%;
+        min-height: 160rpx;
+        padding: 24rpx;
+        border: 2rpx solid #e0e0e0;
+        border-radius: 12rpx;
+        font-size: 30rpx;
+        box-sizing: border-box;
+        resize: none;
+        line-height: 1.5;
+        transition: border-color 0.3s;
+
+        &:focus {
+          border-color: #667eea;
+          outline: none;
+        }
+      }
+
+      .picker-view {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80rpx;
+        padding: 0 24rpx;
+        border: 2rpx solid #e0e0e0;
+        border-radius: 12rpx;
+        font-size: 30rpx;
+        background: white;
+        transition: border-color 0.3s;
+
+        &:active {
+          border-color: #667eea;
+        }
+
+        text {
+          line-height: 80rpx;
+        }
+
+        .picker-arrow {
+          color: #999;
+          font-size: 24rpx;
         }
       }
     }
