@@ -7,28 +7,14 @@
           src="/static/avatar-default.png"
           mode="aspectFill"
         />
-        <text class="username">{{ userInfo.username || "用户" }}</text>
-        <text class="email">{{ userInfo.email || "user@example.com" }}</text>
+        <view class="username-container">
+          <text class="username">{{ userInfo.username || "用户" }}</text>
+          <text class="edit-icon" @click="onEditNickname">✏️</text>
+        </view>
       </view>
     </view>
 
     <view class="menu-section">
-      <view class="menu-item" @click="onMenuClick('settings')">
-        <view class="menu-icon">
-          <text class="icon">⚙️</text>
-        </view>
-        <text class="menu-text">设置</text>
-        <text class="menu-arrow">></text>
-      </view>
-
-      <view class="menu-item" @click="onMenuClick('theme')">
-        <view class="menu-icon">
-          <text class="icon">🎨</text>
-        </view>
-        <text class="menu-text">主题设置</text>
-        <text class="menu-arrow">></text>
-      </view>
-
       <view class="menu-item" @click="onMenuClick('notification')">
         <view class="menu-icon">
           <text class="icon">🔔</text>
@@ -79,6 +65,30 @@
     <view class="logout-section">
       <button class="logout-btn" @click="onLogout">退出登录</button>
     </view>
+
+    <!-- 昵称修改弹窗 -->
+    <Modal
+      v-model:visible="nicknameModalVisible"
+      confirm-text="保存"
+      cancel-text="取消"
+      @confirm="onSaveNickname"
+      @cancel="onCancelEditNickname"
+      width="600rpx"
+    >
+      <view class="nickname-edit-content">
+        <view class="modal-title">修改昵称</view>
+        <view class="form-group">
+          <text class="form-label">新昵称</text>
+          <input
+            v-model="newNickname"
+            class="form-input"
+            placeholder="请输入新昵称"
+            maxlength="20"
+          />
+          <text class="form-tip">昵称长度不超过20个字符</text>
+        </view>
+      </view>
+    </Modal>
 
     <!-- 关于我们弹窗 -->
     <Modal
@@ -156,7 +166,6 @@ import Modal from "@/components/Common/Modal.vue";
 
 interface UserInfo {
   username: string;
-  email: string;
   avatar?: string;
 }
 
@@ -169,7 +178,6 @@ interface Stats {
 
 const userInfo = reactive<UserInfo>({
   username: "用户",
-  email: "user@example.com",
 });
 
 const stats = reactive<Stats>({
@@ -181,21 +189,11 @@ const stats = reactive<Stats>({
 
 // 弹窗状态
 const aboutModalVisible = ref(false);
+const nicknameModalVisible = ref(false);
+const newNickname = ref("");
 
 const onMenuClick = (type: string) => {
   switch (type) {
-    case "settings":
-      uni.showToast({
-        title: "设置功能开发中",
-        icon: "none",
-      });
-      break;
-    case "theme":
-      uni.showToast({
-        title: "主题设置功能开发中",
-        icon: "none",
-      });
-      break;
     case "notification":
       uni.showToast({
         title: "通知设置功能开发中",
@@ -213,6 +211,46 @@ const onMenuClick = (type: string) => {
       aboutModalVisible.value = true;
       break;
   }
+};
+
+// 昵称修改相关方法
+const onEditNickname = () => {
+  newNickname.value = userInfo.username;
+  nicknameModalVisible.value = true;
+};
+
+const onSaveNickname = () => {
+  const trimmedNickname = newNickname.value.trim();
+
+  if (!trimmedNickname) {
+    uni.showToast({
+      title: "昵称不能为空",
+      icon: "none",
+    });
+    return;
+  }
+
+  if (trimmedNickname.length > 20) {
+    uni.showToast({
+      title: "昵称长度不能超过20个字符",
+      icon: "none",
+    });
+    return;
+  }
+
+  // 保存昵称
+  userInfo.username = trimmedNickname;
+  nicknameModalVisible.value = false;
+
+  uni.showToast({
+    title: "昵称修改成功",
+    icon: "success",
+  });
+};
+
+const onCancelEditNickname = () => {
+  newNickname.value = "";
+  nicknameModalVisible.value = false;
 };
 
 const onLogout = () => {
@@ -271,17 +309,30 @@ loadStats();
     margin-bottom: 20rpx;
   }
 
-  .username {
-    display: block;
-    font-size: 32rpx;
-    font-weight: bold;
-    margin-bottom: 10rpx;
-  }
+  .username-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15rpx;
 
-  .email {
-    display: block;
-    font-size: 24rpx;
-    opacity: 0.8;
+    .username {
+      font-size: 32rpx;
+      font-weight: bold;
+    }
+
+    .edit-icon {
+      font-size: 24rpx;
+      padding: 8rpx;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:active {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0.95);
+      }
+    }
   }
 }
 
@@ -382,6 +433,57 @@ loadStats();
 
     &:active {
       background: #ff3742;
+    }
+  }
+}
+
+// 昵称修改弹窗样式
+.nickname-edit-content {
+  .modal-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30rpx;
+    padding-bottom: 20rpx;
+    border-bottom: 2rpx solid #f0f0f0;
+  }
+
+  .form-group {
+    .form-label {
+      display: block;
+      font-size: 28rpx;
+      color: #333;
+      margin-bottom: 15rpx;
+      font-weight: 500;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 80rpx;
+      padding: 0 20rpx;
+      border: 2rpx solid #e0e0e0;
+      border-radius: 10rpx;
+      font-size: 28rpx;
+      color: #333;
+      background: #fff;
+      box-sizing: border-box;
+
+      &:focus {
+        border-color: #667eea;
+        outline: none;
+      }
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+
+    .form-tip {
+      display: block;
+      font-size: 22rpx;
+      color: #999;
+      margin-top: 10rpx;
     }
   }
 }
