@@ -1,117 +1,112 @@
 <template>
-  <view class="add-page">
+  <view class="container">
+    <!-- 页面标题 -->
     <view class="header">
       <text class="title">添加任务</text>
     </view>
 
+    <!-- 表单内容 -->
     <view class="form-container">
       <view class="form-item">
-        <text class="label">任务标题</text>
+        <text class="form-label">任务标题 *</text>
         <input
           v-model="taskForm.title"
-          class="input"
+          class="form-input"
           placeholder="请输入任务标题"
-          maxlength="50"
+          maxlength="100"
         />
       </view>
 
       <view class="form-item">
-        <text class="label">任务描述</text>
+        <text class="form-label">任务描述</text>
         <textarea
           v-model="taskForm.description"
-          class="textarea"
+          class="form-textarea"
           placeholder="请输入任务描述"
-          maxlength="200"
+          maxlength="500"
         />
       </view>
 
       <view class="form-item">
-        <text class="label">优先级</text>
+        <text class="form-label">优先级</text>
         <picker
           :value="priorityIndex"
           :range="priorityOptions"
           @change="onPriorityChange"
         >
-          <view class="picker">
-            {{ priorityOptions[priorityIndex] }}
+          <view class="picker-view">
+            <text>{{ priorityOptions[priorityIndex] }}</text>
+            <text class="picker-arrow">▼</text>
           </view>
         </picker>
       </view>
 
       <view class="form-item">
-        <text class="label">截止日期</text>
+        <text class="form-label">分类</text>
+        <input
+          v-model="taskForm.category"
+          class="form-input"
+          placeholder="请输入分类"
+          maxlength="50"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">截止日期</text>
         <picker mode="date" :value="taskForm.dueDate" @change="onDateChange">
-          <view class="picker">
-            {{ taskForm.dueDate || "请选择截止日期" }}
-          </view>
-        </picker>
-      </view>
-
-      <view class="form-item">
-        <text class="label">分类</text>
-        <picker
-          :value="categoryIndex"
-          :range="categoryOptions"
-          @change="onCategoryChange"
-        >
-          <view class="picker">
-            {{ categoryOptions[categoryIndex] }}
+          <view class="picker-view">
+            <text>{{ taskForm.dueDate || "选择截止日期" }}</text>
+            <text class="picker-arrow">▼</text>
           </view>
         </picker>
       </view>
     </view>
 
-    <view class="button-group">
-      <button class="btn btn-cancel" @click="onCancel">取消</button>
-      <button class="btn btn-confirm" @click="onConfirm">确认添加</button>
+    <!-- 底部按钮 -->
+    <view class="footer">
+      <view class="btn cancel-btn" @click="goBack">
+        <text>取消</text>
+      </view>
+      <view
+        class="btn confirm-btn"
+        @click="submitTask"
+        :class="{ disabled: !taskForm.title.trim() }"
+      >
+        <text>确定</text>
+      </view>
     </view>
   </view>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from "vue";
 
-interface TaskForm {
-  title: string;
-  description: string;
-  priority: string;
-  dueDate: string;
-  category: string;
-}
-
-const taskForm = reactive<TaskForm>({
+// 响应式数据
+const taskForm = reactive({
   title: "",
   description: "",
-  priority: "中等",
+  priority: 2,
+  category: "默认分类",
   dueDate: "",
-  category: "工作",
 });
 
-const priorityOptions = ["低", "中等", "高", "紧急"];
-const categoryOptions = ["工作", "学习", "生活", "其他"];
+// 优先级选项
+const priorityOptions = ["低优先级", "中优先级", "高优先级"];
+const priorityIndex = ref(1); // 默认中优先级
 
-const priorityIndex = ref(1);
-const categoryIndex = ref(0);
-
-const onPriorityChange = (e: any) => {
+// 优先级选择
+const onPriorityChange = (e) => {
   priorityIndex.value = e.detail.value;
-  taskForm.priority = priorityOptions[e.detail.value];
+  taskForm.priority = parseInt(e.detail.value) + 1;
 };
 
-const onCategoryChange = (e: any) => {
-  categoryIndex.value = e.detail.value;
-  taskForm.category = categoryOptions[e.detail.value];
-};
-
-const onDateChange = (e: any) => {
+// 日期选择
+const onDateChange = (e) => {
   taskForm.dueDate = e.detail.value;
 };
 
-const onCancel = () => {
-  uni.navigateBack();
-};
-
-const onConfirm = () => {
+// 提交任务
+const submitTask = async () => {
   if (!taskForm.title.trim()) {
     uni.showToast({
       title: "请输入任务标题",
@@ -120,29 +115,59 @@ const onConfirm = () => {
     return;
   }
 
-  // 这里可以调用API保存任务
-  uni.showToast({
-    title: "任务添加成功",
-    icon: "success",
-  });
+  try {
+    const result = await uniCloud.callFunction({
+      name: "task-create",
+      data: {
+        title: taskForm.title,
+        description: taskForm.description,
+        priority: taskForm.priority,
+        category: taskForm.category,
+        dueDate: taskForm.dueDate,
+      },
+    });
 
-  // 延迟返回上一页
-  setTimeout(() => {
-    uni.navigateBack();
-  }, 1500);
+    if (result.result.code === 0) {
+      uni.showToast({
+        title: "任务添加成功",
+        icon: "success",
+      });
+
+      // 延迟跳转，让用户看到成功提示
+      setTimeout(() => {
+        uni.navigateBack();
+      }, 1500);
+    } else {
+      uni.showToast({
+        title: result.result.message || "添加任务失败",
+        icon: "none",
+      });
+    }
+  } catch (error) {
+    console.error("添加任务失败:", error);
+    uni.showToast({
+      title: "网络错误",
+      icon: "none",
+    });
+  }
+};
+
+// 返回上一页
+const goBack = () => {
+  uni.navigateBack();
 };
 </script>
 
 <style lang="scss" scoped>
-.add-page {
+.container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background: #f5f5f5;
   padding: 20rpx;
 }
 
 .header {
   text-align: center;
-  padding: 40rpx 0;
+  margin-bottom: 40rpx;
 
   .title {
     font-size: 36rpx;
@@ -156,70 +181,107 @@ const onConfirm = () => {
   border-radius: 20rpx;
   padding: 40rpx;
   margin-bottom: 40rpx;
-}
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
 
-.form-item {
-  margin-bottom: 40rpx;
+  .form-item {
+    margin-bottom: 40rpx;
 
-  .label {
-    display: block;
-    font-size: 28rpx;
-    color: #666;
-    margin-bottom: 20rpx;
-  }
+    &:last-child {
+      margin-bottom: 0;
+    }
 
-  .input,
-  .textarea {
-    width: 100%;
-    padding: 20rpx;
-    border: 2rpx solid #e0e0e0;
-    border-radius: 10rpx;
-    font-size: 28rpx;
-    background: #fafafa;
-    box-sizing: border-box;
+    .form-label {
+      font-size: 28rpx;
+      color: #333;
+      display: block;
+      margin-bottom: 20rpx;
+      font-weight: 500;
+    }
 
-    &:focus {
-      border-color: #667eea;
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 24rpx;
+      border: 2rpx solid #e0e0e0;
+      border-radius: 12rpx;
+      font-size: 28rpx;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+
+      &:focus {
+        border-color: #667eea;
+      }
+    }
+
+    .form-textarea {
+      height: 160rpx;
+      resize: none;
+    }
+
+    .picker-view {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24rpx;
+      border: 2rpx solid #e0e0e0;
+      border-radius: 12rpx;
+      font-size: 28rpx;
       background: white;
+      transition: border-color 0.3s;
+
+      &:active {
+        border-color: #667eea;
+      }
+
+      .picker-arrow {
+        color: #999;
+        font-size: 24rpx;
+      }
     }
   }
-  .input {
-    height: 90rpx;
-  }
-  .textarea {
-    // height: 120rpx;
-    // resize: none;
-  }
-
-  .picker {
-    padding: 20rpx;
-    border: 2rpx solid #e0e0e0;
-    border-radius: 10rpx;
-    background: #fafafa;
-    font-size: 28rpx;
-    color: #333;
-  }
 }
 
-.button-group {
+.footer {
   display: flex;
   gap: 20rpx;
+  padding: 0 20rpx;
 
   .btn {
     flex: 1;
-    height: 80rpx;
-    border-radius: 40rpx;
-    font-size: 28rpx;
-    border: none;
+    height: 88rpx;
+    border-radius: 44rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32rpx;
+    font-weight: 500;
+    transition: all 0.3s;
 
-    &.btn-cancel {
-      background: #f0f0f0;
+    &.cancel-btn {
+      background: #f5f5f5;
       color: #666;
+
+      &:active {
+        background: #e0e0e0;
+      }
     }
 
-    &.btn-confirm {
-      background: #667eea;
+    &.confirm-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+
+      &:active {
+        opacity: 0.8;
+      }
+
+      &.disabled {
+        background: #ccc;
+        color: #999;
+
+        &:active {
+          opacity: 1;
+        }
+      }
     }
   }
 }

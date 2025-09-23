@@ -29,6 +29,24 @@
       }
     },
     {
+      "path": "pages/test-cloud/test-cloud",
+      "style": {
+        "navigationBarTitleText": "云函数测试",
+        "navigationBarBackgroundColor": "#667eea",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#f5f5f5"
+      }
+    },
+    {
+      "path": "pages/cloud-diagnosis/cloud-diagnosis",
+      "style": {
+        "navigationBarTitleText": "云开发诊断",
+        "navigationBarBackgroundColor": "#667eea",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#f5f5f5"
+      }
+    },
+    {
       "path": "pages/statistics/statistics",
       "style": {
         "navigationBarTitleText": "进度统计",

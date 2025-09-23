@@ -1,0 +1,27 @@
+{
+  "provider": "aliyun",
+  "spaceId": "",
+  "clientSecret": "",
+  "functions": [
+    {
+      "name": "task-list",
+      "description": "获取任务列表",
+      "timeout": 10
+    },
+    {
+      "name": "task-create",
+      "description": "创建任务",
+      "timeout": 10
+    },
+    {
+      "name": "task-delete",
+      "description": "删除任务",
+      "timeout": 10
+    },
+    {
+      "name": "init-database",
+      "description": "初始化数据库",
+      "timeout": 10
+    }
+  ]
+}

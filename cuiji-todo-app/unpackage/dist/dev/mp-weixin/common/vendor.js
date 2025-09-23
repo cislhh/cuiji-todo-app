@@ -2725,21 +2725,21 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     );
   }
 }
-const createHook = (lifecycle) => (hook, target = currentInstance) => (
+const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
   // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
   (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
 );
-const onBeforeMount = createHook("bm");
-const onMounted = createHook("m");
-const onBeforeUpdate = createHook("bu");
-const onUpdated = createHook("u");
-const onBeforeUnmount = createHook("bum");
-const onUnmounted = createHook("um");
-const onServerPrefetch = createHook("sp");
-const onRenderTriggered = createHook(
+const onBeforeMount = createHook$1("bm");
+const onMounted = createHook$1("m");
+const onBeforeUpdate = createHook$1("bu");
+const onUpdated = createHook$1("u");
+const onBeforeUnmount = createHook$1("bum");
+const onUnmounted = createHook$1("um");
+const onServerPrefetch = createHook$1("sp");
+const onRenderTriggered = createHook$1(
   "rtg"
 );
-const onRenderTracked = createHook(
+const onRenderTracked = createHook$1(
   "rtc"
 );
 function onErrorCaptured(hook, target = currentInstance) {
@@ -9819,6 +9819,24 @@ const pages = [
     }
   },
   {
+    path: "pages/test-cloud/test-cloud",
+    style: {
+      navigationBarTitleText: "云函数测试",
+      navigationBarBackgroundColor: "#667eea",
+      navigationBarTextStyle: "white",
+      backgroundColor: "#f5f5f5"
+    }
+  },
+  {
+    path: "pages/cloud-diagnosis/cloud-diagnosis",
+    style: {
+      navigationBarTitleText: "云开发诊断",
+      navigationBarBackgroundColor: "#667eea",
+      navigationBarTextStyle: "white",
+      backgroundColor: "#f5f5f5"
+    }
+  },
+  {
     path: "pages/statistics/statistics",
     style: {
       navigationBarTitleText: "进度统计",
@@ -10179,7 +10197,7 @@ class v {
 function I(e2) {
   return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
 }
-const S = true, b = "mp-weixin", T = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), A = b, P = I(""), C = I("[]") || [];
+const S = true, b = "mp-weixin", T = I(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), A = b, P = I('{"address":["127.0.0.1","192.168.1.4","172.18.64.1"],"servePort":7000,"debugPort":9000,"initialLaunchType":"local","skipFiles":["<node_internals>/**","D:/software/HBuilderX/plugins/unicloud/**/*.js"]}'), C = I('[{"provider":"aliyun","spaceName":"cuiji-todo-app","spaceId":"mp-cb5e1083-fab6-460e-88de-44412839f6a8","clientSecret":"tsi1qLQG+VGUtycu1MP0FQ==","endpoint":"https://api.next.bspapp.com"}]') || [];
 let O = "";
 try {
   O = "__UNI__E3092B4";
@@ -12730,7 +12748,7 @@ let tr = new class {
 })();
 var nr = tr;
 var define_process_env_UNI_STATISTICS_CONFIG_default = { version: "2", enable: true };
-var define_process_env_UNI_STAT_TITLE_JSON_default = { "pages/index/index": "待办事项管理应用", "pages/tasks/tasks": "任务管理", "pages/add/add": "添加任务", "pages/statistics/statistics": "进度统计", "pages/profile/profile": "我的" };
+var define_process_env_UNI_STAT_TITLE_JSON_default = { "pages/index/index": "待办事项管理应用", "pages/tasks/tasks": "任务管理", "pages/add/add": "添加任务", "pages/test-cloud/test-cloud": "云函数测试", "pages/cloud-diagnosis/cloud-diagnosis": "云开发诊断", "pages/statistics/statistics": "进度统计", "pages/profile/profile": "我的" };
 var define_process_env_UNI_STAT_UNI_CLOUD_default = {};
 const sys = index$1.getSystemInfoSync();
 const STAT_VERSION = "4.66";
@@ -13882,6 +13900,10 @@ function main() {
   }
 }
 main();
+const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
+  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
+};
+const onShow = /* @__PURE__ */ createHook(ON_SHOW);
 exports.Pinia = Pinia;
 exports._export_sfc = _export_sfc;
 exports.computed = computed;
@@ -13894,8 +13916,10 @@ exports.f = f$1;
 exports.index = index$1;
 exports.index$1 = index;
 exports.n = n$1;
+exports.nr = nr;
 exports.o = o$1;
 exports.onMounted = onMounted;
+exports.onShow = onShow;
 exports.p = p$1;
 exports.reactive = reactive;
 exports.ref = ref;

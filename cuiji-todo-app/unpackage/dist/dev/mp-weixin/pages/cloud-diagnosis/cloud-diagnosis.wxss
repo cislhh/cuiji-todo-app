@@ -1,0 +1,108 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.container.data-v-36df5f3d {
+  padding: 40rpx;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+.header.data-v-36df5f3d {
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+.header .title.data-v-36df5f3d {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+.diagnosis-section.data-v-36df5f3d {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 40rpx;
+}
+.diagnosis-section .diagnosis-item.data-v-36df5f3d {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+.diagnosis-section .diagnosis-item.data-v-36df5f3d:last-child {
+  border-bottom: none;
+}
+.diagnosis-section .diagnosis-item .diagnosis-label.data-v-36df5f3d {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+.diagnosis-section .diagnosis-item .btn.data-v-36df5f3d {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20rpx 40rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+.diagnosis-section .diagnosis-item .btn.data-v-36df5f3d:active {
+  opacity: 0.8;
+}
+.result-section.data-v-36df5f3d {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 40rpx;
+}
+.result-section .result-title.data-v-36df5f3d {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 20rpx;
+}
+.result-section .result-text.data-v-36df5f3d {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.help-section.data-v-36df5f3d {
+  background: #fff7e6;
+  border-radius: 20rpx;
+  padding: 40rpx;
+}
+.help-section .help-title.data-v-36df5f3d {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #fa8c16;
+  display: block;
+  margin-bottom: 20rpx;
+}
+.help-section .help-text.data-v-36df5f3d {
+  font-size: 24rpx;
+  color: #fa8c16;
+  line-height: 1.8;
+  display: block;
+  margin-bottom: 10rpx;
+}

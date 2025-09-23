@@ -3,6 +3,8 @@
     "pages/index/index",
     "pages/tasks/tasks",
     "pages/add/add",
+    "pages/test-cloud/test-cloud",
+    "pages/cloud-diagnosis/cloud-diagnosis",
     "pages/statistics/statistics",
     "pages/profile/profile"
   ],

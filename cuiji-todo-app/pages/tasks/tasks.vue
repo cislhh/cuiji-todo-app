@@ -1,78 +1,80 @@
 <template>
-  <view class="tasks-container">
-    <!-- 顶部统计卡片 -->
-    <view class="stats-cards">
-      <view class="stat-card">
-        <text class="stat-number">{{ taskStats.total }}</text>
-        <text class="stat-label">总任务</text>
-      </view>
-      <view class="stat-card">
-        <text class="stat-number">{{ taskStats.completed }}</text>
-        <text class="stat-label">已完成</text>
-      </view>
-      <view class="stat-card">
-        <text class="stat-number">{{ taskStats.pending }}</text>
-        <text class="stat-label">待完成</text>
+  <view class="container">
+    <!-- 页面标题 -->
+    <view class="header">
+      <text class="title">任务管理</text>
+      <view class="add-btn" @click="goToAddPage">
+        <text class="add-icon">+</text>
       </view>
     </view>
 
-    <!-- 搜索和筛选 -->
-    <view class="search-section">
-      <u-search
-        v-model="searchKeyword"
-        placeholder="搜索任务..."
-        @search="handleSearch"
-        @clear="handleClearSearch"
-        class="search-input"
-      ></u-search>
+    <!-- 筛选栏 -->
+    <view class="filter-bar">
+      <view
+        class="filter-item"
+        :class="{ active: currentFilter === 'all' }"
+        @click="setFilter('all')"
+      >
+        <text>全部</text>
+      </view>
+      <view
+        class="filter-item"
+        :class="{ active: currentFilter === 'pending' }"
+        @click="setFilter('pending')"
+      >
+        <text>待完成</text>
+      </view>
+      <view
+        class="filter-item"
+        :class="{ active: currentFilter === 'completed' }"
+        @click="setFilter('completed')"
+      >
+        <text>已完成</text>
+      </view>
     </view>
 
     <!-- 任务列表 -->
     <view class="task-list">
-      <view v-if="tasks.length === 0" class="empty-state">
-        <text class="empty-icon">📝</text>
+      <view v-if="loading" class="loading">
+        <text>加载中...</text>
+      </view>
+
+      <view v-else-if="tasks.length === 0" class="empty">
         <text class="empty-text">暂无任务</text>
-        <text class="empty-desc">您还没有任何任务</text>
+        <text class="empty-tip">点击右上角 + 号添加任务</text>
       </view>
 
       <view v-else>
         <view
-          v-for="task in filteredTasks"
-          :key="task.id"
+          v-for="task in tasks"
+          :key="task._id"
           class="task-item"
           :class="{ completed: task.completed }"
         >
           <view class="task-content">
             <view class="task-header">
               <text class="task-title">{{ task.title }}</text>
-              <view class="task-priority" :class="task.priority">
-                {{ getPriorityText(task.priority) }}
+              <view class="task-actions">
+                <view
+                  class="action-btn delete-btn"
+                  @click="deleteTask(task._id)"
+                >
+                  <text class="action-icon">🗑️</text>
+                </view>
               </view>
             </view>
 
-            <text v-if="task.description" class="task-desc">
-              {{ task.description }}
-            </text>
+            <view v-if="task.description" class="task-description">
+              <text>{{ task.description }}</text>
+            </view>
 
             <view class="task-meta">
-              <text v-if="task.dueDate" class="task-due">
-                📅 {{ formatDate(task.dueDate) }}
-              </text>
               <text class="task-category">{{ task.category }}</text>
+              <text class="task-priority" :class="'priority-' + task.priority">
+                {{ getPriorityText(task.priority) }}
+              </text>
+              <text class="task-time">{{ formatTime(task.createTime) }}</text>
             </view>
-          </view>
-
-          <view class="task-actions">
-            <u-button
-              type="primary"
-              size="mini"
-              @click="toggleTaskComplete(task.id)"
-            >
-              {{ task.completed ? "未完成" : "完成" }}
-            </u-button>
-            <u-button type="error" size="mini" @click="deleteTask(task.id)">
-              删除
-            </u-button>
           </view>
         </view>
       </view>
@@ -80,258 +82,309 @@
   </view>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import { onShow } from "@dcloudio/uni-app";
 
 // 响应式数据
-const searchKeyword = ref("");
-const tasks = ref([
-  {
-    id: 1,
-    title: "完成项目文档",
-    description: "编写API文档和用户手册",
-    completed: false,
-    priority: "high",
-    dueDate: "2024-01-30",
-    category: "工作",
-    createTime: new Date(),
-  },
-  {
-    id: 2,
-    title: "购买生活用品",
-    description: "去超市购买日用品",
-    completed: true,
-    priority: "medium",
-    dueDate: "2024-01-28",
-    category: "生活",
-    createTime: new Date(),
-  },
-]);
+const loading = ref(false);
+const currentFilter = ref("all");
+const tasks = ref([]);
 
 // 计算属性
-const taskStats = computed(() => {
-  const total = tasks.value.length;
-  const completed = tasks.value.filter((task) => task.completed).length;
-  const pending = total - completed;
-  return { total, completed, pending };
-});
-
 const filteredTasks = computed(() => {
-  if (!searchKeyword.value) return tasks.value;
-  return tasks.value.filter(
-    (task) =>
-      task.title.toLowerCase().includes(searchKeyword.value.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchKeyword.value.toLowerCase())
-  );
+  if (currentFilter.value === "all") {
+    return tasks.value;
+  } else if (currentFilter.value === "pending") {
+    return tasks.value.filter((task) => !task.completed);
+  } else if (currentFilter.value === "completed") {
+    return tasks.value.filter((task) => task.completed);
+  }
+  return tasks.value;
 });
 
 // 方法
-const handleSearch = () => {
-  // 搜索逻辑已在计算属性中处理
+const setFilter = (filter) => {
+  currentFilter.value = filter;
 };
 
-const handleClearSearch = () => {
-  searchKeyword.value = "";
+const getPriorityText = (priority) => {
+  const texts = ["", "低", "中", "高"];
+  return texts[priority] || "中";
 };
 
-const toggleTaskComplete = (taskId: number) => {
-  const task = tasks.value.find((t) => t.id === taskId);
-  if (task) {
-    task.completed = !task.completed;
+const formatTime = (time) => {
+  const date = new Date(time);
+  const now = new Date();
+  const diff = now - date;
+
+  if (diff < 60000) {
+    // 1分钟内
+    return "刚刚";
+  } else if (diff < 3600000) {
+    // 1小时内
+    return Math.floor(diff / 60000) + "分钟前";
+  } else if (diff < 86400000) {
+    // 1天内
+    return Math.floor(diff / 3600000) + "小时前";
+  } else {
+    return date.toLocaleDateString();
   }
 };
 
-const deleteTask = (taskId: number) => {
+// 获取任务列表
+const getTaskList = async () => {
+  loading.value = true;
+  try {
+    const result = await uniCloud.callFunction({
+      name: "task-list",
+      data: {
+        page: 1,
+        pageSize: 50,
+      },
+    });
+
+    if (result.result.code === 0) {
+      tasks.value = result.result.data.list;
+    } else {
+      uni.showToast({
+        title: result.result.message || "获取任务列表失败",
+        icon: "none",
+      });
+    }
+  } catch (error) {
+    console.error("获取任务列表失败:", error);
+    uni.showToast({
+      title: "网络错误",
+      icon: "none",
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+// 删除任务
+const deleteTask = async (taskId) => {
   uni.showModal({
     title: "确认删除",
     content: "确定要删除这个任务吗？",
-    success: (res) => {
+    success: async (res) => {
       if (res.confirm) {
-        tasks.value = tasks.value.filter((t) => t.id !== taskId);
-        uni.showToast({
-          title: "删除成功",
-          icon: "success",
-        });
+        try {
+          const result = await uniCloud.callFunction({
+            name: "task-delete",
+            data: { taskId },
+          });
+
+          if (result.result.code === 0) {
+            uni.showToast({
+              title: "删除成功",
+              icon: "success",
+            });
+            getTaskList(); // 重新获取任务列表
+          } else {
+            uni.showToast({
+              title: result.result.message || "删除失败",
+              icon: "none",
+            });
+          }
+        } catch (error) {
+          console.error("删除任务失败:", error);
+          uni.showToast({
+            title: "网络错误",
+            icon: "none",
+          });
+        }
       }
     },
   });
 };
 
-const getPriorityText = (priority: string) => {
-  const map: Record<string, string> = {
-    low: "低",
-    medium: "中",
-    high: "高",
-    urgent: "紧急",
-  };
-  return map[priority] || "中";
+// 跳转到添加页面
+const goToAddPage = () => {
+  uni.navigateTo({
+    url: "/pages/add/add",
+  });
 };
 
-const formatDate = (dateStr: string) => {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("zh-CN");
-};
-
+// 生命周期
 onMounted(() => {
-  console.log("任务页面加载完成");
+  getTaskList();
+});
+
+// 页面显示时刷新
+onShow(() => {
+  getTaskList();
 });
 </script>
 
 <style lang="scss" scoped>
-.tasks-container {
+.container {
   min-height: 100vh;
-  background-color: #f5f5f5;
-  padding: 20rpx 20rpx 160rpx 20rpx; /* 底部留出导航栏空间 */
+  background: #f5f5f5;
+  padding: 20rpx;
 }
 
-.stats-cards {
+.header {
   display: flex;
-  gap: 20rpx;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 30rpx;
 
-  .stat-card {
-    flex: 1;
+  .title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .add-btn {
+    width: 80rpx;
+    height: 80rpx;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 16rpx;
-    padding: 30rpx 20rpx;
-    text-align: center;
-    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .stat-number {
-      display: block;
-      font-size: 48rpx;
+    .add-icon {
+      color: white;
+      font-size: 40rpx;
       font-weight: bold;
-      margin-bottom: 10rpx;
-    }
-
-    .stat-label {
-      font-size: 24rpx;
-      opacity: 0.9;
     }
   }
 }
 
-.search-section {
+.filter-bar {
+  display: flex;
+  background: white;
+  border-radius: 20rpx;
+  padding: 10rpx;
   margin-bottom: 30rpx;
 
-  .search-input {
-    width: 100%;
+  .filter-item {
+    flex: 1;
+    text-align: center;
+    padding: 20rpx;
+    border-radius: 15rpx;
+    transition: all 0.3s;
+
+    &.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    text {
+      font-size: 28rpx;
+    }
   }
 }
 
 .task-list {
-  .empty-state {
+  .loading,
+  .empty {
     text-align: center;
     padding: 100rpx 0;
-    color: #999;
 
-    .empty-icon {
-      font-size: 80rpx;
+    .empty-text {
+      font-size: 32rpx;
+      color: #999;
       display: block;
       margin-bottom: 20rpx;
     }
 
-    .empty-text {
-      font-size: 32rpx;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 10rpx;
-    }
-
-    .empty-desc {
+    .empty-tip {
       font-size: 24rpx;
-      display: block;
+      color: #ccc;
+    }
+  }
+}
+
+.task-item {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+
+  &.completed {
+    opacity: 0.6;
+
+    .task-title {
+      text-decoration: line-through;
     }
   }
 
-  .task-item {
-    background: white;
-    border-radius: 16rpx;
-    padding: 30rpx;
-    margin-bottom: 20rpx;
-    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    &.completed {
-      opacity: 0.6;
+  .task-content {
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20rpx;
 
       .task-title {
-        text-decoration: line-through;
+        font-size: 32rpx;
+        font-weight: bold;
+        color: #333;
+        flex: 1;
+        margin-right: 20rpx;
+      }
+
+      .task-actions {
+        .action-btn {
+          padding: 10rpx;
+
+          .action-icon {
+            font-size: 32rpx;
+          }
+        }
       }
     }
 
-    .task-content {
-      flex: 1;
-      margin-right: 20rpx;
+    .task-description {
+      margin-bottom: 20rpx;
 
-      .task-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15rpx;
-
-        .task-title {
-          font-size: 32rpx;
-          font-weight: bold;
-          color: #333;
-        }
-
-        .task-priority {
-          padding: 8rpx 16rpx;
-          border-radius: 20rpx;
-          font-size: 20rpx;
-          color: white;
-
-          &.low {
-            background-color: #52c41a;
-          }
-
-          &.medium {
-            background-color: #faad14;
-          }
-
-          &.high {
-            background-color: #ff4d4f;
-          }
-
-          &.urgent {
-            background-color: #722ed1;
-          }
-        }
-      }
-
-      .task-desc {
-        font-size: 26rpx;
+      text {
+        font-size: 28rpx;
         color: #666;
         line-height: 1.5;
-        margin-bottom: 15rpx;
-        display: block;
-      }
-
-      .task-meta {
-        display: flex;
-        gap: 20rpx;
-        font-size: 22rpx;
-        color: #999;
-
-        .task-due {
-          color: #ff4d4f;
-        }
-
-        .task-category {
-          background-color: #f0f0f0;
-          padding: 4rpx 12rpx;
-          border-radius: 12rpx;
-        }
       }
     }
 
-    .task-actions {
+    .task-meta {
       display: flex;
-      flex-direction: column;
-      gap: 10rpx;
+      align-items: center;
+      gap: 20rpx;
+
+      text {
+        font-size: 24rpx;
+        color: #999;
+      }
+
+      .task-category {
+        background: #f0f0f0;
+        padding: 8rpx 16rpx;
+        border-radius: 20rpx;
+      }
+
+      .task-priority {
+        padding: 8rpx 16rpx;
+        border-radius: 20rpx;
+
+        &.priority-1 {
+          background: #e8f5e8;
+          color: #52c41a;
+        }
+
+        &.priority-2 {
+          background: #fff7e6;
+          color: #fa8c16;
+        }
+
+        &.priority-3 {
+          background: #fff1f0;
+          color: #ff4d4f;
+        }
+      }
     }
   }
 }

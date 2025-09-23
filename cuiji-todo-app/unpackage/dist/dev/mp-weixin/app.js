@@ -6,6 +6,8 @@ if (!Math) {
   "./pages/index/index.js";
   "./pages/tasks/tasks.js";
   "./pages/add/add.js";
+  "./pages/test-cloud/test-cloud.js";
+  "./pages/cloud-diagnosis/cloud-diagnosis.js";
   "./pages/statistics/statistics.js";
   "./pages/profile/profile.js";
 }
