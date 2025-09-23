@@ -127,7 +127,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
       return colors[Math.floor(Math.random() * colors.length)];
     };
     const viewShareDetail = (share) => {
-      common_vendor.index.__f__("log", "at pages/index/index.vue:342", "查看分享详情:", share);
+      common_vendor.index.__f__("log", "at pages/index/index.vue:334", "查看分享详情:", share);
     };
     const toggleFollow = (userId) => {
       const user = shareCards.value.find((share) => share.user.id === userId);
@@ -145,26 +145,6 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
         share.isLiked = !share.isLiked;
         share.likeCount += share.isLiked ? 1 : -1;
       }
-    };
-    const showComments = (shareId) => {
-      common_vendor.index.__f__("log", "at pages/index/index.vue:366", "显示评论:", shareId);
-      common_vendor.index.showToast({
-        title: "评论功能开发中",
-        icon: "none"
-      });
-    };
-    const shareToSocial = (shareId) => {
-      common_vendor.index.__f__("log", "at pages/index/index.vue:374", "分享到社交平台:", shareId);
-      common_vendor.index.showActionSheet({
-        itemList: ["分享到微信", "分享到朋友圈", "复制链接"],
-        success: (res) => {
-          const actions = ["分享到微信", "分享到朋友圈", "复制链接"];
-          common_vendor.index.showToast({
-            title: actions[res.tapIndex],
-            icon: "success"
-          });
-        }
-      });
     };
     const toggleTag = (tagId) => {
       const index = newShare.selectedTags.indexOf(tagId);
@@ -221,7 +201,7 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
     common_vendor.onMounted(() => {
       todayDate.value = formatDate();
       todayStats.completionRate = completionRate.value;
-      common_vendor.index.__f__("log", "at pages/index/index.vue:452", "首页加载完成");
+      common_vendor.index.__f__("log", "at pages/index/index.vue:422", "首页加载完成");
     });
     return (_ctx, _cache) => {
       return {
@@ -249,11 +229,8 @@ const _sfc_main = /* @__PURE__ */ common_vendor.defineComponent({
             j: common_vendor.t(share.isLiked ? "❤️" : "🤍"),
             k: common_vendor.t(share.likeCount),
             l: common_vendor.o(($event) => toggleLike(share.id), index),
-            m: common_vendor.t(share.commentCount),
-            n: common_vendor.o(($event) => showComments(share.id), index),
-            o: common_vendor.o(($event) => shareToSocial(share.id), index),
-            p: index,
-            q: common_vendor.o(($event) => viewShareDetail(share), index)
+            m: index,
+            n: common_vendor.o(($event) => viewShareDetail(share), index)
           };
         }),
         f: common_vendor.o(($event) => showCreateShare.value = true),

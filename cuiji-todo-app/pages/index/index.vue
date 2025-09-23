@@ -101,14 +101,6 @@
                   }}</text>
                   <text class="action-text">{{ share.likeCount }}</text>
                 </view>
-                <view class="action-item" @click.stop="showComments(share.id)">
-                  <text class="action-icon">💬</text>
-                  <text class="action-text">{{ share.commentCount }}</text>
-                </view>
-                <view class="action-item" @click.stop="shareToSocial(share.id)">
-                  <text class="action-icon">📤</text>
-                  <text class="action-text">分享</text>
-                </view>
               </view>
             </view>
           </view>
@@ -360,28 +352,6 @@ const toggleLike = (shareId: string) => {
     share.isLiked = !share.isLiked;
     share.likeCount += share.isLiked ? 1 : -1;
   }
-};
-
-const showComments = (shareId: string) => {
-  console.log("显示评论:", shareId);
-  uni.showToast({
-    title: "评论功能开发中",
-    icon: "none",
-  });
-};
-
-const shareToSocial = (shareId: string) => {
-  console.log("分享到社交平台:", shareId);
-  uni.showActionSheet({
-    itemList: ["分享到微信", "分享到朋友圈", "复制链接"],
-    success: (res) => {
-      const actions = ["分享到微信", "分享到朋友圈", "复制链接"];
-      uni.showToast({
-        title: actions[res.tapIndex],
-        icon: "success",
-      });
-    },
-  });
 };
 
 const toggleTag = (tagId: string) => {
@@ -663,7 +633,7 @@ onMounted(() => {
 
           .card-actions {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             padding-top: 20rpx;
             border-top: 1rpx solid #eee;
 

@@ -197,7 +197,7 @@
 }
 .content .share-section .share-cards .share-card .card-content .card-actions.data-v-1cf27b2a {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   padding-top: 20rpx;
   border-top: 1rpx solid #eee;
 }
